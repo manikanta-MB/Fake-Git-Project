@@ -133,3 +133,88 @@ Id     Name     Salary
 #### 5. Max()
 **Max(salary):** Maximum value in the salary i.e., 80.
 
+## Normalization
+Normalization is the process of minimizing redundancy from a relation or set of relations. Redundancy in relation may cause insertion, deletion, and update anomalies. So, it helps to minimize the redundancy in relations. Normal forms are used to eliminate or reduce redundancy in database tables.
+
+#### 1.First Normal Form
+If a relation contain composite or multi-valued attribute, it violates first normal form or a relation is in first normal form if it does not contain any composite or multi-valued attribute. A relation is in first normal form if every attribute in that relation is singled valued attribute.
+
+##### Example
+```
+ID   Name   Courses
+------------------
+1    A      c1, c2
+2    E      c3
+3    M      C2, c3
+```
+In the above table Course is a multi-valued attribute so it is not in 1NF.
+
+Below Table is in 1NF as there is no multi-valued attribute
+```
+ID   Name   Course
+------------------
+1    A       c1
+1    A       c2
+2    E       c3
+3    M       c2
+3    M       c3
+```
+#### 2.Second Normal Form
+To be in second normal form, a relation must be in first normal form and relation must not contain any partial dependency. A relation is in 2NF if it has **No Partial Dependency**, i.e., no non-prime attribute (attributes which are not part of any candidate key) is dependent on any proper subset of any candidate key of the table.
+
+**Partial Dependency** – If the proper subset of candidate key determines non-prime attribute, it is called partial dependency.
+
+##### Example
+```
+STUD_NO            COURSE_NO        COURSE_FEE
+1                     C1                  1000
+2                     C2                  1500
+1                     C4                  2000
+4                     C3                  1000
+4                     C1                  1000
+2                     C5                  2000
+```
+COURSE_FEE would be a non-prime attribute, as it does not belong to the one only candidate key {STUD_NO, COURSE_NO} ;
+But, COURSE_NO -> COURSE_FEE, i.e., COURSE_FEE is dependent on COURSE_NO, which is a proper subset of the candidate key. Non-prime attribute COURSE_FEE is dependent on a proper subset of the candidate key, which is a partial dependency and so this relation is not in 2NF.
+
+To convert the above relation to 2NF,
+we need to split the table into two tables such as :
+
+Table 1: STUD_NO, COURSE_NO<br />
+Table 2: COURSE_NO, COURSE_FEE
+
+```
+       Table 1                                    Table 2
+STUD_NO            COURSE_NO          COURSE_NO                COURSE_FEE     
+1                 C1                  C1                        1000
+2                 C2                  C2                        1500
+1                 C4                  C3                        1000
+4                 C3                  C4                        2000
+4                 C1                  C5                        2000        
+```
+
+#### 3.Third Normal Form
+A relation is in third normal form, if there is no transitive dependency for non-prime attributes as well as it is in second normal form.
+A relation is in 3NF if at least one of the following condition holds in every non-trivial function dependency X –> Y
+
+1. X is a super key.
+2. Y is a prime attribute (each element of Y is part of some candidate key).
+
+![3NF table](https://media.geeksforgeeks.org/wp-content/cdn-uploads/Normalisation_normalforms_3.png)
+
+**Transitive dependency** – If A->B and B->C are two FDs then A->C is called transitive dependency.
+##### Example
+In relation STUDENT given in Table 4,<br />
+FD set: {STUD_NO -> STUD_NAME, STUD_NO -> STUD_STATE, STUD_STATE -> STUD_COUNTRY, STUD_NO -> STUD_AGE}
+Candidate Key: {STUD_NO}
+
+For this relation in table 4, STUD_NO -> STUD_STATE and STUD_STATE -> STUD_COUNTRY are true. So STUD_COUNTRY is transitively dependent on STUD_NO. It violates the third normal form. To convert it in third normal form, we will decompose the relation STUDENT (STUD_NO, STUD_NAME, STUD_PHONE, STUD_STATE, STUD_COUNTRY_STUD_AGE) as:
+
+STUDENT (STUD_NO, STUD_NAME, STUD_PHONE, STUD_STATE, STUD_AGE)<br />
+STATE_COUNTRY (STATE, COUNTRY)
+
+#### 4. Boyce-Codd Normal Form (BCNF)
+A relation is in BCNF, if it is in 3NF and it should not contain the following dependency,<br />
+Non-prime/Prime Attribute   --->  Prime Attribute.
+
+#### Indexes

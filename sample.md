@@ -92,3 +92,44 @@ ON table1.matching_column = table2.matching_column;
 ```
 ![full join](https://i.stack.imgur.com/3Ll1h.png)
 
+## Aggregate functions
+In database management an aggregate function is a function where the values of multiple rows are grouped together as input on certain criteria to form a single value of more significant meaning.
+
+Following are some of the basic Aggregate functions,
+```
+1) Count()
+2) Sum()
+3) Avg()
+4) Min()
+5) Max()
+```
+Now let us understand each Aggregate function with a example:
+```
+Id     Name     Salary
+-----------------------
+1       A        80
+2       B        40
+3       C        60
+4       D        70
+5       E        60
+6       F        Null
+```
+#### 1. Count()
+**Count(*):** Returns total number of records .i.e 6.<br />
+**Count(salary):** Return number of Non Null values over the column salary. i.e 5.<br />
+**Count(Distinct Salary):**  Return number of distinct Non Null values over the column salary .i.e 4.
+
+#### 2. Sum()
+**Sum(salary):**  Sum all Non Null values of Column salary i.e., 310. <br />
+**Sum(Distinct salary):** Sum of all distinct Non-Null values i.e., 250.
+
+#### 3. Avg()
+**Avg(salary)** = Sum(salary) / Count(salary) = 310/5. <br />
+**Avg(Distinct salary)** = Sum(Distinct salary) / Count(Distinct Salary) = 250/4.
+
+#### 4. Min()
+**Min(salary):** Minimum value in the salary column except NULL i.e., 40.
+
+#### 5. Max()
+**Max(salary):** Maximum value in the salary i.e., 80.
+

@@ -354,3 +354,26 @@ This command is used to remove a SAVEPOINT that you have created.
 RELEASE SAVEPOINT SAVEPOINT_NAME;
 ```
 Once a SAVEPOINT has been released, you can no longer use the ROLLBACK command to undo transactions performed since the last SAVEPOINT.
+
+## Locking Mechanism
+Locking mechanisms are a way for databases to produce sequential data output without the sequential steps. The locks provide a method for securing the data that is being used so no anomalies can occur like lost data or additional data that can be added because of the loss of a transaction.
+### Problems that Locks solve
+* **Lost Update Problem:** A lost update occurs when two different transactions are trying to update the same column on the same row within a database at the same time.
+* **Temporary Update Problem:** Temporary update or dirty read problem occurs when one transaction updates an item and fails.
+* **Incorrect Summary Problem:** Incorrect Summary issue occurs when one transaction takes summary over the value of all the instances of a repeated data-item, and second transaction update few instances of that specific data-item.
+* **Phantom Reads:** A lower isolation level increases the ability of many users to access the same data at the same time, but increases the number of concurrency effects (such as dirty reads or lost updates) users might encounter.
+
+### Different Types of Locks
+There are three primary types of locks that are used in a database.
+* **Read Locks:** These types of locks make it so that data can only be read. Depending on the database system and restrictions on the read lock, this can make it so only one user can read the data to allowing every user access to reading the data but not being able to modify anything. The read lock can be applied to a single row, a section of rows, or an entire table. This can also be dependent on the type of database system that is being used that could limit the amount of data that can be locked for reading.
+* **Write Locks:** This type of lock is used for updates in the database system. When this lock is applied it prevents any other transactions from changing the records that are being accessed. This does allow transactions to read the data before it is modified and the changes are made permanent.
+* **Exclusive Write Locks:** This type of lock is similar to a write lock. The only difference is that with an exclusive write lock, the only things that can look at the data or modify the data is the original transaction. No other transaction can read the data while this lock is applied.
+* There are also many other locks that signal intention to request another type of lock. These locks are called multi-level-locks. This is useful to show other transactions what types of locks the transaction has throughout the hierarchy of data levels.
+
+#### Multi-level Locks:
+* **Update Lock:** Signals intention to request an exclusive lock in the near future.
+* **IS Lock:** Signals intent to request shared (read) lock in the near future.
+* **IX Lock:** Signals intent to request an exclusive (write) lock in the near future.
+
+#### Two-Phase Locking Protocol
+The Two Phase Commit is designed to coordinate the transactions of the requests to the system. The idea behind the protocol is to produce serialized results from a non-serialized system. This protocol requires that each transaction issues lock and unlock requests in two phases: the shrinking phase and the growing phase. During the growing phase transactions may obtain locks, but cannot release any. During the shrinking phase transactions may release locks but may not obtain any new locks. By following this protocol any update problems with the transaction can be detected and one transaction gets rolled back. It also can raise the priority of the affected transaction to prevent a repeat of the problem.

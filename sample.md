@@ -377,3 +377,24 @@ There are three primary types of locks that are used in a database.
 
 #### Two-Phase Locking Protocol
 The Two Phase Commit is designed to coordinate the transactions of the requests to the system. The idea behind the protocol is to produce serialized results from a non-serialized system. This protocol requires that each transaction issues lock and unlock requests in two phases: the shrinking phase and the growing phase. During the growing phase transactions may obtain locks, but cannot release any. During the shrinking phase transactions may release locks but may not obtain any new locks. By following this protocol any update problems with the transaction can be detected and one transaction gets rolled back. It also can raise the priority of the affected transaction to prevent a repeat of the problem.
+
+## Isolation Levels in DBMS
+As we know that, in order to maintain consistency in a database, it follows ACID properties. Among these four properties (Atomicity, Consistency, Isolation and Durability) Isolation determines how transaction integrity is visible to other users and systems. It means that a transaction should take place in a system in such a way that it is the only transaction that is accessing the resources in a database system.
+
+Isolation levels define the degree to which a transaction must be isolated from the data modifications made by any other transaction in the database system.
+
+A transaction isolation level is defined by the following phenomena,
+* **Dirty Read** – A Dirty read is the situation when a transaction reads a data that has not yet been committed. For example, Let’s say transaction 1 updates a row and leaves it uncommitted, meanwhile, Transaction 2 reads the updated row. If transaction 1 rolls back the change, transaction 2 will have read data that is considered never to have existed.
+* **Non Repeatable read** – Non Repeatable read occurs when a transaction reads same row twice, and get a different value each time. For example, suppose transaction T1 reads data. Due to concurrency, another transaction T2 updates the same data and commit, Now if transaction T1 rereads the same data, it will retrieve a different value.
+* **Phantom Read** – Phantom Read occurs when two same queries are executed, but the rows retrieved by the two, are different. For example, suppose transaction T1 retrieves a set of rows that satisfy some search criteria. Now, Transaction T2 generates some new rows that match the search criteria for transaction T1. If transaction T1 re-executes the statement that reads the rows, it gets a different set of rows this time.
+
+Based on these phenomena, The SQL standard defines four isolation levels,<br />
+* **Read Uncommitted** – Read Uncommitted is the lowest isolation level. In this level, one transaction may read not yet committed changes made by other transaction, thereby allowing dirty reads. In this level, transactions are not isolated from each other.
+* **Read Committed** – This isolation level guarantees that any data read is committed at the moment it is read. Thus it does not allows dirty read. The transaction holds a read or write lock on the current row, and thus prevent other transactions from reading, updating or deleting it.
+* **Repeatable Read** – This is the most restrictive isolation level. The transaction holds read locks on all rows it references and writes locks on all rows it inserts, updates, or deletes. Since other transaction cannot read, update or delete these rows, consequently it avoids non-repeatable read.
+* **Serializable** – This is the Highest isolation level. A serializable execution is guaranteed to be serializable. Serializable execution is defined to be an execution of operations in which concurrently executing transactions appears to be serially executing.
+
+The Table given below clearly depicts the relationship between isolation levels, read phenomena and locks :
+![isolation_levels](https://media.geeksforgeeks.org/wp-content/cdn-uploads/transactnLevel.png)
+
+## Triggers

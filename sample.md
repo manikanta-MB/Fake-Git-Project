@@ -398,3 +398,69 @@ The Table given below clearly depicts the relationship between isolation levels,
 ![isolation_levels](https://media.geeksforgeeks.org/wp-content/cdn-uploads/transactnLevel.png)
 
 ## Triggers
+A trigger is a stored procedure in database which automatically invokes whenever a special event in the database occurs. For example, a trigger can be invoked when a row is inserted into a specified table or when certain table columns are being updated.
+##### Syntax:
+```
+CREATE OR MODIFY TRIGGER trigger_name
+WHEN EVENT
+ON table_name TRIGGER_TYPE
+EXECUTE stored_procedure;
+```
+##### Explanation of Syntax
+* **CREATE** - It will create the new trigger with trigger_name
+* **MODIFY** - It will modify the existing trigger
+* **trigger_name** - name of the trigger
+* **table_name** - table name on which the trigger will be created.
+* **WHEN**
+    * BEFORE - Invoke before the event occurs
+    * AFTER - Invoke After the event occurs
+* **EVENT**
+    * INSERT - Invoke for insert
+    * UPDATE - Invoke for update
+    * DELETE - Invoke for delete
+* **TRIGGER_TYPE**
+    * FOR EACH ROW
+    * FOR EACH SATEMENT
+* **stored_procedure** - procedure or statements which are to be executed whenever the trigger is fired.
+
+#### Example
+Given Student Table, in which student marks assessment is recorded. In such schema, create a trigger so that the total and average of specified marks is automatically inserted whenever a record is insert.
+
+Here, as trigger will invoke before record is inserted so, BEFORE Tag can be used.
+##### Table Schema
+```
++-------+-------------+------+-----+---------+----------------+ 
+| Field | Type        | Null | Key | Default | Extra          | 
++-------+-------------+------+-----+---------+----------------+ 
+| tid   | int(4)      | NO   | PRI | NULL    | auto_increment | 
+| name  | varchar(30) | YES  |     | NULL    |                | 
+| subj1 | int(2)      | YES  |     | NULL    |                | 
+| subj2 | int(2)      | YES  |     | NULL    |                | 
+| subj3 | int(2)      | YES  |     | NULL    |                | 
+| total | int(3)      | YES  |     | NULL    |                | 
+| per   | int(3)      | YES  |     | NULL    |                |
++-------+-------------+------+-----+---------+----------------+ 
+```
+##### SQL Trigger to Problem Statement
+```
+CREATE TRIGGER stud_marks 
+BEFORE INSERT 
+ON 
+Student 
+FOR EACH ROW 
+SET Student.total = Student.subj1 + Student.subj2 + Student.subj3, Student.per = Student.total * 60 / 100;
+```
+Above SQL statement will create a trigger in the student Table in which whenever subjects marks are entered, before inserting this data into the database, trigger will compute those two values and insert with the entered values. i.e.,
+```
+mysql> insert into Student values(0, "ABCDE", 20, 20, 20, 0, 0); 
+Query OK, 1 row affected (0.09 sec) 
+
+mysql> select * from Student; 
++-----+-------+-------+-------+-------+-------+------+ 
+| tid | name  | subj1 | subj2 | subj3 | total | per  | 
++-----+-------+-------+-------+-------+-------+------+ 
+| 100 | ABCDE |    20 |    20 |    20 |    60 |   36 | 
++-----+-------+-------+-------+-------+-------+------+ 
+1 row in set (0.00 sec)
+```
+In this way triggers can be created and executed in the Tables.

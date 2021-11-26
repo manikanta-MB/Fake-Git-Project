@@ -280,4 +280,77 @@ EXEC sp_rename
    new_index_name,  
    N'INDEX'; 
 ```
+## Transactions
+Transactions group a set of tasks into a single execution unit. Each transaction begins with a specific task and ends when all the tasks in the group successfully complete. If any of the tasks fail, the transaction fails. Therefore, a transaction has only two results: **success** or **failure**.
+A database transaction, by definition, must be atomic, consistent, isolated and durable.
+### How to implement transactions using SQL
+Following commands are used to control transactions. It is important to note that these statements cannot be used while creating tables and are only used with the DML Commands such as – INSERT, UPDATE and DELETE. 
+#### 1.BEGIN TRANSACTION
+It indicates the start point of an explicit or local transaction. 
+##### Syntax
+```
+BEGIN TRANSACTION transaction_name ;
+```
+#### 2.SET TRANSACTION
+Places a name on transaction.
+##### Syntax
+```
+SET TRANSACTION [ READ WRITE | READ ONLY ];
+```
+#### 3.COMMIT
+ If everything is in order with all statements within a single transaction, all changes are recorded together in the database is called **committed**. The COMMIT command saves all the transactions to the database since the last COMMIT or ROLLBACK command.
+ ##### Syntax
+ ```
+ COMMIT;
+ ```
+ ##### Example
+ ![sample_table](https://media.geeksforgeeks.org/wp-content/uploads/1-38.jpg)
+ 
+ Following is an example which would delete those records from the table which have age = 20 and then COMMIT the changes in the database. 
+ ##### Queries:
+ ```
+DELETE FROM Student WHERE AGE = 20;
+COMMIT;
+```
+##### Output:
+Thus, two rows from the table would be deleted and the SELECT statement would look like, 
+![output_table](https://media.geeksforgeeks.org/wp-content/uploads/2-34.jpg)
 
+#### 4.ROLLBACK
+If any error occurs with any of the SQL grouped statements, all changes need to be aborted. The process of reversing changes is called rollback. This command can only be used to undo transactions since the last COMMIT or ROLLBACK command was issued.
+##### Syntax
+```
+ROLLBACK;
+```
+##### Example
+From the above example Sample table1,<br />
+Delete those records from the table which have age = 20 and then ROLLBACK the changes in the database.
+##### Queries:
+```
+DELETE FROM Student WHERE AGE = 20;
+ROLLBACK;
+```
+##### Output:
+![output_table](https://media.geeksforgeeks.org/wp-content/uploads/3-23.jpg)
+
+#### 5.SAVEPOINT
+ creates points within the groups of transactions in which to ROLLBACK. <br />
+A SAVEPOINT is a point in a transaction in which you can roll the transaction back to a certain point without rolling back the entire transaction.
+##### Syntax for creating a savepoint:
+```
+SAVEPOINT SAVEPOINT_NAME;
+```
+This command is used only in the creation of SAVEPOINT among all the transactions.<br />
+In general ROLLBACK is used to undo a group of transactions.
+##### Syntax for rollback to a savepoint:
+```
+ROLLBACK TO SAVEPOINT_NAME;
+```
+you can ROLLBACK to any SAVEPOINT at any time to return the appropriate data to its original state. 
+
+#### 5.RELEASE SAVEPOINT
+This command is used to remove a SAVEPOINT that you have created. 
+```
+RELEASE SAVEPOINT SAVEPOINT_NAME;
+```
+Once a SAVEPOINT has been released, you can no longer use the ROLLBACK command to undo transactions performed since the last SAVEPOINT.
